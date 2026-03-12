@@ -33,10 +33,18 @@ Built on the existing `spark_project` package structure.
   2. CSV to Delta — read the CSV and write to a `people` Delta table
   3. Test SQL Connectivity — verify JDBC connection to Azure SQL
 
+## Environment Configuration
+
+- The `LOCAL_DEV` environment variable is set to `"1"` via `.vscode/settings.json` using `terminal.integrated.env.linux`.
+- This tells the code it's running locally (see [Local Dev / Fabric Strategy](../local-dev-fabric-strategy.md) for details).
+- In Fabric, `LOCAL_DEV` is not set — its absence signals the production runtime.
+
 ## Development & Deployment Workflow
 
 1. **Develop locally** — all modules are built and tested on the local PySpark environment first. No Fabric access is needed until the final step.
 2. **Deploy to Fabric** — once everything works locally, deploy to Microsoft Fabric as a Spark Job Definition.
+   - **Workspace:** `daily_etl`
+   - **Default Lakehouse:** `pyspark_devops`
 3. **Verify on Fabric:**
    - Check the **Livy endpoint** for job logs and execution status.
-   - Check the **Lakehouse** to confirm the output files (CSV and Delta table) were written correctly.
+   - Check the **Lakehouse** (`pyspark_devops`) to confirm the output files (CSV and Delta table) were written correctly.

@@ -20,7 +20,17 @@ def is_local_dev() -> bool:
     return os.environ.get("LOCAL_DEV") == "1"
 ```
 
-Set `LOCAL_DEV=1` in your dev container's environment (e.g., `.devcontainer/devcontainer.json` or `.env`). Never set it in Fabric — its absence is the signal.
+Set `LOCAL_DEV=1` in `.vscode/settings.json` via `terminal.integrated.env.linux`:
+
+```json
+{
+    "terminal.integrated.env.linux": {
+        "LOCAL_DEV": "1"
+    }
+}
+```
+
+Never set it in Fabric — its absence is the signal.
 
 All environment-specific branching flows through this single check. Avoid scattering `os.environ.get("LOCAL_DEV")` throughout your codebase; centralize it in a helper and import it everywhere.
 
