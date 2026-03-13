@@ -15,7 +15,6 @@ Unchanging project-level facts. Every numbered spec inherits these.
 - **Source:** `src/hello_pyspark_local_dev/`
 - **Tests:** `tests/`
 
-> **IMPORTANT:** The existing repo is a template. The package **must** be renamed to match the package name specified above — including the `src/` directory, `pyproject.toml` `[project] name`, all imports, and any other references. Do not keep the template's original package name.
 
 ## Stack
 

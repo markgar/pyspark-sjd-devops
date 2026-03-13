@@ -40,6 +40,16 @@ If no path is given, search the workspace for spec files (commonly `spec/`, `spe
 
 Follow these steps in order. Loop back as needed.
 
+0. **Scaffold the package (if needed)**
+   1. Read the CONSTITUTION.md in the spec set directory → extract the `Package name` field.
+   2. Check if `src/<package_name>/` already exists.
+   3. If it does NOT exist:
+      - `mkdir -p src/<package_name>`
+      - Create `src/<package_name>/__init__.py` with a docstring and `__version__ = "0.0.1"`.
+      - In `pyproject.toml`: replace `_PACKAGE_NAME_` → `<package_name>` in both `[project] name` and `known-first-party`.
+      - In `.github/copilot-instructions.md`: replace `` `src/<package>/` `` → `` `src/<package_name>/` ``.
+   4. Run `pip install -e .` to install the package in editable mode.
+
 1. **Read the spec** — open the spec file provided by the user (or find it in the workspace). Understand every module, the entry point, and environment requirements.
 2. **Build the code** — implement in `src/` using the existing package structure. The repo is a working package — read existing structure before modifying. Don't scaffold from scratch.
 3. **Write tests and run pytest** — unit tests in `tests/`. Use `pytest -m "not integration"` for fast local runs.
