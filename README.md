@@ -20,20 +20,32 @@ Two things make this possible:
 
 - A **Fabric workspace** with its workspace identity enabled (the sample specs use `pyspark-sjd-devops`).
 - If your pipeline reads from a SQL database, grant the workspace identity **db_datareader** on that database (the sample specs use `wideworldimporters` — grab the [Standard bacpac](https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Standard.bacpac) from the [sql-server-samples](https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v1.0) repo and import it into Azure SQL).
-- The sample specs reference specific item names (workspace, lakehouse, environment, SQL server/database). Review `sample_spec_set/CONSTITUTION.md` and update them to match your environment.
 
 ### Steps
 
-1. **Open in the dev container** — VS Code will build the container with Spark, Delta, JDBC drivers, Azure CLI, and all Python dependencies pre-installed.
+1. **Clone into a folder named after your project** — this repo is a template. The agent will build your PySpark package inside it, so pick a name that matches what you're building:
 
-2. **Write a spec** — describe your ETL pipeline in markdown (see `sample_spec_set/` for the format).
+   ```bash
+   git clone https://github.com/<org>/pyspark-sjd-devops-template.git <your-project-name>
+   cd <your-project-name>
+   ```
 
-3. **Build with sjd-builder** — select **sjd-builder** from the Copilot chat mode dropdown, then hand it one spec at a time:
+   Then disconnect from the template remote and (optionally) point at your own repo:
+
+   ```bash
+   git remote remove origin
+   # git remote add origin https://github.com/<org>/<your-project-name>.git
+   ```
+
+2. **Open in the dev container** — VS Code will build the container with Spark, Delta, JDBC drivers, Azure CLI, and all Python dependencies pre-installed.
+
+3. **Configure for your environment** — edit `sample_spec_set/CONSTITUTION.md` to match your Fabric workspace, lakehouse, environment, and (if applicable) SQL server/database names. The sample specs inherit these values.
+
+4. **Try the sample specs** — select **sjd-builder** from the Copilot chat mode dropdown and hand it a sample spec to see the full workflow in action:
 
    ![sjd-builder chat mode](docs/images/sjd-builder-chat-mode.png)
    ```
    implement sample_spec_set/01_people_to_csv.md
-   implement sample_spec_set/02_csv_to_delta.md
    ```
 
    Or point it at the whole directory to build everything in order:
@@ -41,6 +53,8 @@ Two things make this possible:
    implement the spec in sample_spec_set/
    ```
    It reads the spec, writes the code and tests, runs locally, and deploys to Fabric.
+
+5. **Write your own specs** — once you've seen how it works, write specs for your own pipelines (see `sample_spec_set/` for the format) and build them the same way.
 
 ## The sjd-builder agent
 
@@ -62,7 +76,7 @@ The agent has two skills that give it domain knowledge beyond what's in its prom
 
 These skills, along with the workspace-wide `copilot-instructions.md`, keep the agent grounded in the project's conventions so it writes code that works identically local and on Fabric.
 
-## `devops_helpers/`
+### Fabric operations helper
 
 `devops_helpers/fabric_ops.py` is a CLI that wraps the Fabric REST API for Spark job operations. It exists for the agent — you shouldn't need to call it directly. The agent (and its skills) are instructed to **check devops_helpers first** before making any raw Fabric API call. If a helper exists, use it; if not, raw API calls are fine.
 
@@ -112,3 +126,7 @@ Files that define the **custom Copilot agent** and support it:
 - Microsoft Fabric Runtime 1.3 compatible
 
 Same code runs locally and on Fabric — only 3–4 narrow branch points separate the two environments. See [docs/LOCAL_VS_FABRIC.md](docs/LOCAL_VS_FABRIC.md) for details.
+
+## Limitations
+
+- **Data sources:** Currently supports **Lakehouse (OneLake / local Delta)** and **SQL Server** sources. SQL connectivity uses JDBC, so the SQL Server must be reachable over the network from wherever the code runs — locally (your machine / dev container) and on Fabric (the Spark cluster). If the server is behind a firewall or private endpoint, you need network line of sight from both environments.
