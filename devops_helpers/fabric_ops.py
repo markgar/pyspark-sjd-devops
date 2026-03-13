@@ -3,21 +3,21 @@
 
 Usage:
     # Run a Spark Job Definition and wait for it to finish
-    python fabric_livy.py run
+    python fabric_ops.py run
 
     # Check the latest (or specific) run status
-    python fabric_livy.py status
-    python fabric_livy.py status --run-id <uuid>
+    python fabric_ops.py status
+    python fabric_ops.py status --run-id <uuid>
 
     # Fetch Livy session details for the latest run
-    python fabric_livy.py livy
+    python fabric_ops.py livy
 
     # Tail driver stdout/stderr for a Spark application
-    python fabric_livy.py logs
-    python fabric_livy.py logs --app-id <application_id>
+    python fabric_ops.py logs
+    python fabric_ops.py logs --app-id <application_id>
 
     # List recent runs
-    python fabric_livy.py runs
+    python fabric_ops.py runs
 
 Environment variables (required):
     WS_ID   — Fabric workspace ID

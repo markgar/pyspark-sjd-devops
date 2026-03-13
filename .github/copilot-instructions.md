@@ -35,7 +35,10 @@ Local PySpark development environment matching Microsoft Fabric Runtime 1.3
 - Use `spark.createDataFrame()` with explicit schemas in tests
 - Stop SparkSessions in test fixtures (session-scoped)
 
-## Reference
+## Fabric SJD constraints
 
-- See [Fabric Deployment Lessons Learned](fabric-deployment-lessons-learned.md) for deployment gotchas and best practices
-- See [Local Dev / Fabric Strategy](local-dev-fabric-strategy.md) for the dual-environment pattern (local dev container vs Fabric runtime)
+- Never use `mssparkutils` or `notebookutils` in SJD code — they don't exist in the SJD runtime
+- Use `DefaultAzureCredential` for all Azure auth — works identically local and Fabric
+- Use environment variables for values that differ between environments
+
+
